@@ -1,27 +1,66 @@
+using AerialDistance.Database;
+using AerialDistance.Repositories.Contracts;
+using AerialDistance.Repositories.Repositories;
+using Bullows.Repositories.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+var config = builder.Configuration;
+
+// Register the DbContext with the DI container
+
+builder.Services.AddDbContext<AerialDistanceDbContext>(options =>
+    options.UseSqlServer(config.GetConnectionString("DefaultConnection"), sqlServerOptionsAction: sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure();
+    }));
+
+// Register other services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWorks>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "UserLoginCookie";
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", config =>
+{
+    config.Cookie.Name = "SimpleAuthAuthe2.Cookie";
+    config.LoginPath = "/LogOn/LogIn";
+    config.AccessDeniedPath = "/LogOn/LogIn";
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseForwardedHeaders();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=LogOn}/{action=LogIn}/{id?}");
 
 app.Run();
