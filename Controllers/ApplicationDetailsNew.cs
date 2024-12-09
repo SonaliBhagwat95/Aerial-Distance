@@ -2,7 +2,7 @@
 
 namespace AerialDistance.Controllers
 {
-    public class ApplicationDetailsNew : Controller
+    public class ApplicationDetailsNewController : Controller
     {
         public IActionResult Index()
         {

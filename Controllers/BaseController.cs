@@ -1,10 +1,8 @@
 ﻿
+using AerialDistance.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
-
-
-
 
 namespace AerialDistance.Controllers
 {

@@ -18,11 +18,18 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.18" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AerialDistance.Database\AerialDistance.Database.csproj" />
+    <ProjectReference Include="..\AerialDistance.Model\AerialDistance.Model.csproj" />
     <ProjectReference Include="..\AerialDistance.Repositories\AerialDistance.Repositories.csproj" />
+    <ProjectReference Include="..\AerialDistance.Utilities\AerialDistance.Utilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>
 
 </Project>
